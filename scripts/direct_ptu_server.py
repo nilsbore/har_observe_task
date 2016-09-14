@@ -16,7 +16,8 @@ class DirectPTUServer(object):
         rospy.init_node('direct_ptu_server')
         rospy.Subscriber("/direct_ptu_at_point", Pose, self.direct_ptu_at)
 
-        self.t = tf.TransformerROS(True, rospy.Duration(4.0))
+        #self.t = tf.TransformerROS(True, rospy.Duration(4.0))
+        self.t = tf.TransformListener()
         self.action_client = actionlib.SimpleActionClient('/SetPTUState', PtuGotoAction)
         rospy.loginfo("Waiting for ptu action...")
         self.action_client.wait_for_server()
@@ -26,9 +27,10 @@ class DirectPTUServer(object):
 
         msg = PoseStamped()
         msg.pose = p
-        msg.header.frame_id = "/map"
+        msg.header.frame_id = "map"
         msg.header.stamp = rospy.Time.now()
-        msgq = self.t.transformPose("/ptu_pan_motor", msg)
+        #msgq = self.t.transformPose("/ptu_pan_motor", msg)
+        msgq = self.t.transformPose("ptu_pan_motor", msg)
 
         q = np.array([msgq.pose.position.x, msgq.pose.position.y, msgq.pose.position.z])
         q = q / np.linalg.norm(q)
