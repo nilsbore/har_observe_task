@@ -37,19 +37,24 @@ class ObserveHARActionServer(object):
 
         rate = rospy.Rate(1.0)
         start = rospy.Time().now()
-        while !rospy.is_shutdown:
+        while not rospy.is_shutdown():
             rate.sleep()
+            self._as.publish_feedback(self._feedback)
+            print "Sleeping..."
             now = rospy.Time().now()
-            if now - start > rospy.Duration(60*1) or self.cancelled:
+            if now - start > rospy.Duration(60.0*1.0) or self.cancelled:
+                print "Damn, now I got cancelled in the loop"
                 break
 
-        self.empty_pub.publish(Empty())
-        if not self.cancelled :
+        if not self.cancelled:
+            self.empty_pub.publish(Empty())
             self._result.success = True
             self._as.set_succeeded(self._result)
 
 
     def preemptCallback(self):
+        print "Damn, now I got cancelled in the callback"
+
         self.cancelled = True
 
         self.empty_pub.publish(Empty())
