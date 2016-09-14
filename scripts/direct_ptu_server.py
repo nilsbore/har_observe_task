@@ -35,21 +35,24 @@ class DirectPTUServer(object):
                 msgq = self.t.transformPose("ptu_pan_motor", msg)
                 break
             except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-                rospy.Duration(0.01).sleep()
+		rospy.sleep(rospy.Duration(0.01))
 
 
         q = np.array([msgq.pose.position.x, msgq.pose.position.y, msgq.pose.position.z])
+
+        print "Point is at ", q
+
         q = q / np.linalg.norm(q)
-        theta = 180.0/math.pi*math.acos(q[2])
-        phi = 180.0/math.pi*math.atan2(p[1], p[0])
+        theta = -180.0/math.pi*math.asin(q[2])
+        phi = 180.0/math.pi*math.atan2(q[1], q[0])
 
         print "Directing at point ", q
         print "With theta ", theta
         print "and phi ", phi
 
         goal = PtuGotoGoal()
-        goal.pan = theta
-        goal.tilt = phi
+        goal.pan = phi
+        goal.tilt = theta
         goal.pan_vel = 30
         goal.tilt_vel = 30
 
