@@ -8,6 +8,7 @@ import math
 from scitos_ptu.msg import PtuGotoAction, PtuGotoGoal,  PtuGotoResult
 from actionlib_msgs.msg import *
 import actionlib
+from std_msgs.msg import Empty
 
 class DirectPTUServer(object):
 
@@ -15,6 +16,7 @@ class DirectPTUServer(object):
 
         rospy.init_node('direct_ptu_server')
         rospy.Subscriber("/direct_ptu_at_point", Pose, self.direct_ptu_at)
+        rospy.Subscriber("/direct_ptu_at_origin", Empty, self.reset_ptu)
 
         #self.t = tf.TransformerROS(True, rospy.Duration(4.0))
         self.t = tf.TransformListener()
@@ -22,6 +24,17 @@ class DirectPTUServer(object):
         rospy.loginfo("Waiting for ptu action...")
         self.action_client.wait_for_server()
         rospy.loginfo("Got ptu action server")
+
+    def reset_ptu(self, empty):
+
+        goal = PtuGotoGoal()
+        goal.pan = 0
+        goal.tilt = 0
+        goal.pan_vel = 30
+        goal.tilt_vel = 30
+
+        self.action_client.send_goal(goal)
+        self.action_client.wait_for_result()
 
     def direct_ptu_at(self, p):
 

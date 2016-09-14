@@ -1,0 +1,8 @@
+#goal definition
+geometry_msgs/Pose observe_point
+---
+#result definition
+bool success #Returns true when the time 'seconds' is up.
+---
+#feedback
+bool good #Maximum translation velocity.
