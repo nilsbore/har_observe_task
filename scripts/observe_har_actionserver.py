@@ -33,6 +33,15 @@ class ObserveHARActionServer(object):
     def executeCallback(self, goal):
         self.cancelled = False
 
+        goal_pose = Pose()
+        goal_pose.position.x = goal.x
+        goal_pose.position.x = goal.y
+        goal_pose.position.x = goal.z
+        goal_pose.rotation.x = 0.0
+        goal_pose.rotation.y = 0.0
+        goal_pose.rotation.z = 0.0
+        goal_pose.rotation.w = 1.0
+
         self.pose_pub.publish(goal.observe_point)
 
         rate = rospy.Rate(1.0)

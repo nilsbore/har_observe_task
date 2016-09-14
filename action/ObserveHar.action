@@ -1,5 +1,7 @@
 #goal definition
-geometry_msgs/Pose observe_point
+float32 x
+float32 y
+float32 z
 ---
 #result definition
 bool success #Returns true when the time 'seconds' is up.

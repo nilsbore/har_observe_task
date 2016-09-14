@@ -8,10 +8,7 @@ from strands_perception_msgs.msg import Table
 import math
 
 def distance(p0,p1):
-
     return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2)
-
-
 
 def getNodes():
     #print queries.get_nodes(""," ")
@@ -28,19 +25,3 @@ def getTables():
     tables,meta = zip(*objs)
 
     return tables
-
-
-topological_nodes = getNodes()
-tables = getTables()
-
-tablenodepairs = []
-
-for table in tables:
-     table_position = [table.pose.pose.position.x, table.pose.pose.position.y]
-     distances = []
-     for topological_node in topological_nodes:
-         node_position = [topological_node.pose.position.x, topological_node.pose.position.y]
-         distances.append(distance(table_position,node_position))
-     minindex =  distances.index(min(distances))
-     #print topological_nodes[minindex].pose.position
-     #print table.pose.pose.position
