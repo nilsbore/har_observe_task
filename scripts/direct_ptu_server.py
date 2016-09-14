@@ -30,7 +30,13 @@ class DirectPTUServer(object):
         msg.header.frame_id = "map"
         msg.header.stamp = rospy.Time.now()
         #msgq = self.t.transformPose("/ptu_pan_motor", msg)
-        msgq = self.t.transformPose("ptu_pan_motor", msg)
+        while True:
+            try:
+                msgq = self.t.transformPose("ptu_pan_motor", msg)
+                break
+            except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+                rospy.Duration(0.01).sleep()
+
 
         q = np.array([msgq.pose.position.x, msgq.pose.position.y, msgq.pose.position.z])
         q = q / np.linalg.norm(q)
