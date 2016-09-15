@@ -37,12 +37,12 @@ class ObserveHARActionServer(object):
         goal_pose.position.x = goal.x
         goal_pose.position.x = goal.y
         goal_pose.position.x = goal.z
-        goal_pose.rotation.x = 0.0
-        goal_pose.rotation.y = 0.0
-        goal_pose.rotation.z = 0.0
-        goal_pose.rotation.w = 1.0
+        goal_pose.orientation.x = 0.0
+        goal_pose.orientation.y = 0.0
+        goal_pose.orientation.z = 0.0
+        goal_pose.orientation.w = 1.0
 
-        self.pose_pub.publish(goal.observe_point)
+        self.pose_pub.publish(goal_pose)
 
         rate = rospy.Rate(1.0)
         start = rospy.Time().now()

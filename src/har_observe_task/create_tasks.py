@@ -22,9 +22,11 @@ def create_har_observation_tasks(duration=rospy.Duration(30*60)):
 
     for pair in tablenodepairs:
         task = Task(start_node_id=pair[1].name, end_node_id=pair[1].name, action='observe_har', max_duration=duration)
-        task_utils.add_float_argument(task, pair[0].x)
-        task_utils.add_float_argument(task, pair[0].y)
+        task_utils.add_float_argument(task, pair[0][0])
+        task_utils.add_float_argument(task, pair[0][1])
         task_utils.add_float_argument(task, 1.0)
         tasks.append(task)
+
+    tasks.pop(0)
 
     return tasks
