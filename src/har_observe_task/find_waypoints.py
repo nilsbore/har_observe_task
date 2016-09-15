@@ -13,7 +13,7 @@ def distance(p0,p1):
 def getNodes():
     #print queries.get_nodes(""," ")
     msg_store = MessageStoreProxy(collection="topological_maps")
-    objs= msg_store.query(TopologicalNode._type,{"pointset":"kth_floorsix_y2"})
+    objs= msg_store.query(TopologicalNode._type,{"pointset":"dynamic_tmap"})
     nodes,metas = zip(*objs)
 
     return nodes

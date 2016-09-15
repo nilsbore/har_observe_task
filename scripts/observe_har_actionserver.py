@@ -35,8 +35,8 @@ class ObserveHARActionServer(object):
 
         goal_pose = Pose()
         goal_pose.position.x = goal.x
-        goal_pose.position.x = goal.y
-        goal_pose.position.x = goal.z
+        goal_pose.position.y = goal.y
+        goal_pose.position.z = goal.z
         goal_pose.orientation.x = 0.0
         goal_pose.orientation.y = 0.0
         goal_pose.orientation.z = 0.0
@@ -51,7 +51,7 @@ class ObserveHARActionServer(object):
             self._as.publish_feedback(self._feedback)
             print "Sleeping..."
             now = rospy.Time().now()
-            if now - start > rospy.Duration(60.0*1.0) or self.cancelled:
+            if now - start > rospy.Duration(60.0*0.25) or self.cancelled:
                 print "Damn, now I got cancelled in the loop"
                 break
 

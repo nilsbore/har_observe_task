@@ -27,6 +27,5 @@ def create_har_observation_tasks(duration=rospy.Duration(30*60)):
         task_utils.add_float_argument(task, 1.0)
         tasks.append(task)
 
-    tasks.pop(0)
 
     return tasks
