@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from strands_executive_msgs import task_utils
 from strands_executive_msgs.msg import Task
 from find_waypoints import *
