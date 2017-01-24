@@ -54,11 +54,11 @@ def create_har_sweep_tasks(roi_db_name,roi_collection_name,roi_config):
             distances.append(distance(roi_position,node_position))
         minindex =  distances.index(min(distances))
         roinodepairs.append((roi.id, topological_nodes[minindex]))
-    print roinodepairs
+    #print roinodepairs
     tasks = dict()
     for pair in roinodepairs:
         task = Task(start_node_id=pair[1].name, action='do_sweep', max_duration=rospy.Duration(60 * 2))
         task_utils.add_string_argument(task, 'medium')
-        tasks[roi.id] = task
-    print tasks
+        tasks[pair[0]] = task
+    print tasks.keys()
     return tasks
