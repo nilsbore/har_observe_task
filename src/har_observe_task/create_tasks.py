@@ -2,6 +2,11 @@
 from strands_executive_msgs import task_utils
 from strands_executive_msgs.msg import Task
 from find_waypoints import *
+import numpy as np
+from scipy.spatial import ConvexHull
+from geometry_msgs.msg import PoseArray
+from geometry_msgs.msg import Pose
+from soma_msgs.msg import SOMAROIObject
 
 def create_har_observation_tasks(duration=rospy.Duration(30*60)):
 
@@ -29,4 +34,31 @@ def create_har_observation_tasks(duration=rospy.Duration(30*60)):
         tasks.append(task)
 
 
+    return tasks
+
+def create_har_sweep_tasks(roi_db_name,roi_collection_name,roi_config):
+    topological_nodes = getNodes()
+    rois = getRegions(roi_db_name,roi_collection_name,roi_config)
+    roinodepairs = []
+    for roi in rois:
+        vertices = []
+        for apose in roi.posearray.poses:
+            vertices.append([apose.position.x,apose.position.y])
+        hull = ConvexHull(vertices)
+        cx = np.mean(hull.points[hull.vertices,0])
+        cy = np.mean(hull.points[hull.vertices,1])
+        roi_position = [cx, cy]
+        distances = []
+        for topological_node in topological_nodes:
+            node_position = [topological_node.pose.position.x, topological_node.pose.position.y]
+            distances.append(distance(roi_position,node_position))
+        minindex =  distances.index(min(distances))
+        roinodepairs.append((roi.id, topological_nodes[minindex]))
+    print roinodepairs
+    tasks = dict()
+    for pair in roinodepairs:
+        task = Task(start_node_id=pair[1].name, action='do_sweep', max_duration=rospy.Duration(60 * 2))
+        task_utils.add_string_argument(task, 'medium')
+        tasks[roi.id] = task
+    print tasks
     return tasks
