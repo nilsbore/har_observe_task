@@ -19,12 +19,12 @@ class HARTaskManager():
         self.set_exe_stat_srv_name = '/task_executor/set_execution_status'
         #self.deep_object_detection_srv_name = 'deep_net/detect_objects'
         try:
-            rospy.wait_for_service(add_tasks_srv_name,timeout=10)
+            rospy.wait_for_service(self.add_tasks_srv_name,timeout=10)
         except:
             rospy.logerr("Service not available!!")
             sys.exit(-1)
         try:
-            rospy.wait_for_service(set_exe_stat_srv_name,timeout=10)
+            rospy.wait_for_service(self.set_exe_stat_srv_name,timeout=10)
         except:
             rospy.logerr("Service not available!!")
             sys.exit(-1)
@@ -65,11 +65,11 @@ class HARTaskManager():
 
     def send_task(self,task):
 
-        add_tasks_srv = rospy.ServiceProxy(add_tasks_srv_name, AddTasks)
+        add_tasks_srv = rospy.ServiceProxy(self.add_tasks_srv_name, AddTasks)
 
         try:
             # add task to the execution framework
-            task_id = add_tasks_srv(task)
+            task_id = add_tasks_srv([task])
 
         except rospy.ServiceException, e:
             print "Service call failed: %s"%e
@@ -78,7 +78,7 @@ class HARTaskManager():
         tasks = create_har_sweep_tasks()
         print len(tasks)
 
-        add_tasks_srv = rospy.ServiceProxy(add_tasks_srv_name, AddTasks)
+        add_tasks_srv = rospy.ServiceProxy(self.add_tasks_srv_name, AddTasks)
         set_execution_status = rospy.ServiceProxy(set_exe_stat_srv_name, strands_executive_msgs.srv.SetExecutionStatus)
         try:
             # add task to the execution framework
